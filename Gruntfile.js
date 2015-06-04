@@ -12,6 +12,7 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     'src/index.js',
+                    'src/string.js',
                     'src/ajax.js',
                     'src/money.js'
                 ],

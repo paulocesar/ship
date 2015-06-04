@@ -5,6 +5,30 @@
 
 })(window);
 
+(function (scope) {
+    var ship = scope.ship;
+    var $ = scope.$;
+
+    var str = ship.string = {};
+
+    str.firstToLower = function(str) {
+        return str.charAt(0).toLowerCase() + str.slice(1);
+    };
+
+    var rgxWhitespace = /[\s]+/g
+    var rgxTag = /\<[^>]*\>/g
+    var rgxUnwatedChars = /[,.$-]/g
+
+    str.sanitize = function (str) {
+        return $.trim(
+            str.replace(rgxWhitespace, ' ')
+                .replace(rgxTag, '')
+                .replace(rgxUnwatedChars, '')
+        );
+    };
+
+})(window);
+
 (function(scope) {
     var ship = scope.ship;
     var $ = scope.$;
@@ -36,6 +60,8 @@
 
 (function (scope) {
     var ship =  scope.ship;
+    var $ = scope.$;
+    var _ = scope._;
 
     var money = ship.money = {};
 
@@ -124,6 +150,6 @@
         j = (j = i.length) > 3 ? j % 3 : 0;
 
         return s + defaultConfig.prefix + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(num - i).toFixed(c).slice(2) : "");
-    }
+    };
 
 })(window);

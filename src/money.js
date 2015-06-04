@@ -1,5 +1,7 @@
 (function (scope) {
     var ship =  scope.ship;
+    var $ = scope.$;
+    var _ = scope._;
 
     var money = ship.money = {};
 
