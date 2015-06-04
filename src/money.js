@@ -1,39 +1,3 @@
-/*! ship - v0.0.1 - 2015-06-04 */
-(function(scope) {
-
-    var ship = scope.ship = {};
-
-})(window);
-
-(function(scope) {
-    var ship = scope.ship;
-    var $ = scope.$;
-
-    $.ajaxSetup({ cache: false });
-
-    ship.ajax = function (method, url, data) {
-        return $.ajax(url, {
-            method: method,
-            data: JSON.stringify(data),
-            cache: false
-        });
-    };
-
-    ship.get = function (url, data) {
-        return this.ajax('get', url, data);
-    };
-
-    ship.post = function (action, data) {
-        return this.ajax('post', url, data);
-    };
-
-    ship.eval = function (data) {
-        return (new Function("return " + data + ";"))();
-    };
-
-
-})(window);
-
 (function (scope) {
     var ship =  scope.ship;
 
@@ -124,6 +88,6 @@
         j = (j = i.length) > 3 ? j % 3 : 0;
 
         return s + defaultConfig.prefix + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(num - i).toFixed(c).slice(2) : "");
-    }
+    };
 
 })(window);

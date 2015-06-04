@@ -1,1 +1,5 @@
-window.ship = {}
+(function(scope) {
+
+    var ship = scope.ship = {};
+
+})(window);

@@ -11,7 +11,9 @@ module.exports = function (grunt) {
 
             dist: {
                 src: [
-                    'src/index.js'
+                    'src/index.js',
+                    'src/ajax.js',
+                    'src/money.js'
                 ],
                 dest: 'ship.js'
             }
@@ -20,7 +22,15 @@ module.exports = function (grunt) {
         uglify: {
             prod: {
                 files: {
-                    'ship.min.js': [ 'ship.js' ]
+                    'prod/ship.min.js': [
+                        'node_modules/underscore/underscore.js',
+                        'node_modules/jquery/dist/jquery.js',
+                        'node_modules/backbone/backbone.js',
+                        'node_modules/jquery-maskmoney/dist/jquery.maskMoney.js',
+                        'node_modules/moment/moment.js',
+                        'node_modules/moment/locale/br.js',
+                        'ship.js'
+                    ]
                 }
             }
         },
@@ -29,26 +39,13 @@ module.exports = function (grunt) {
             unit: {
                 configFile: 'karma.conf.js'
             }
-        },
-
-        mochaTest: {
-            test: {
-                options: {
-                    reporter: 'spec',
-                    require: 'should',
-                    colors: true,
-                    bail: true
-                },
-                src: [ 'specs/*.spec.js' ]
-            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-karma');
-    grunt.loadNpmTasks('grunt-mocha-test');
 
-    grunt.registerTask('default', [ 'concat', 'uglify:prod', 'test' ]);
-    grunt.registerTask('test', [ 'karma:unit', 'mochaTest:test' ]);
+    grunt.registerTask('default', [ 'concat', 'test', 'uglify:prod' ]);
+    grunt.registerTask('test', [ 'karma:unit' ]);
 };
