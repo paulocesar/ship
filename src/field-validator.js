@@ -48,7 +48,6 @@
 		}
 	};
 
-
 	var buildValidatorFunc = function (v) {
 		return function () {
 			var f = $(this);

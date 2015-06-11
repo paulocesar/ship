@@ -16,6 +16,7 @@ module.exports = function (grunt) {
                     'src/ajax.js',
                     'src/money.js',
                     'src/field-validator.js',
+                    'src/navigator.js',
                     'src/field-mask.js'
                 ],
                 dest: 'ship.js'
