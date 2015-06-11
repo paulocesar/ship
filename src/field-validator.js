@@ -49,7 +49,7 @@
 	};
 
 
-	var buildValidatorFunc = function (V) {
+	var buildValidatorFunc = function (v) {
 		return function () {
 			var f = $(this);
 
@@ -61,7 +61,7 @@
 		};
 	};
 
-	scope.fieldValidator = {
+	ship.fieldValidator = {
 		apply: function (el) {
 			_.each(validators, function (data, cls) {
 				var func = buildValidatorFunc(data);

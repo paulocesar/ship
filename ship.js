@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-06-09 */
+/*! ship - v0.0.1 - 2015-06-10 */
 (function(scope) {
 
     var ship = scope.ship = {};
@@ -154,10 +154,10 @@
 
 })(window);
 
-
 (function (scope) {
 	var ship = scope.ship;
 	var $ = scope.$;
+	var _ = scope._;
 
 	// MUST REFACTOR: must be a css class
 	var inputBackgroundColor = '#FFF9F4';
@@ -205,7 +205,7 @@
 	};
 
 
-	var buildValidatorFunc = function (V) {
+	var buildValidatorFunc = function (v) {
 		return function () {
 			var f = $(this);
 
@@ -217,13 +217,23 @@
 		};
 	};
 
-	scope.fieldValidator = {
-		apply: function () {
+	ship.fieldValidator = {
+		apply: function (el) {
+			_.each(validators, function (data, cls) {
+				var func = buildValidatorFunc(data);
 
+				$(el).find("." + cls)
+					.on('change', func)
+					.on('focusout', func);
+			});
 		},
 
-		reset: function () {
+		reset: function (el) {
+			// MUST change to css
+			$(el).find('input, textarea')
+				.css('background-color', 'white');
 
+			$(el).find('.error-message').remove();
 		}
 	};
 })(window);
