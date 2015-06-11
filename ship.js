@@ -269,8 +269,50 @@
 		}
 	});
 
+	var Display = Backbone.View.extend({
+		subTemplates: { },
+
+		constructor: function () {
+			if (typeof this.name === 'string') {
+				throw new Error("You must set a name to display class");
+			}
+
+			var name = this.name;
+
+			this.el = "#display-" + name;
+			this.template = _.template($("#tpl-display-" + name).html());
+
+			Backbone.View.apply(this, arguments);
+
+			this.render();
+			ship.fieldValidator.apply(this.$el);
+		},
+
+		$f: function (name) {
+			return this.$("[name='" + name + "']");
+		}, 
+
+		render: function () {
+			this.$el.html(this.template({
+				subTemplates: this.subTemplates
+			}));
+		},
+
+		onShow: function () {
+
+		},
+
+		onHide: function () {
+
+		},
+
+		show: function () { this.$el.show(); },
+		hide: function () { this.$el.hide(); }
+	});
+
 	ship.navigator = {
 		router: router,
+		Display: Display,
 
 		go: function (name) { router.goToPage(name); },
 
@@ -280,7 +322,7 @@
 		},
 
 		addDisplays: function(displays) {
-			_.each(displa, function (DisplayClass) {
+			_.each(displays, function (DisplayClass) {
 				ship.navigator.addDisplay(DisplayClass);
 			});
 		},
