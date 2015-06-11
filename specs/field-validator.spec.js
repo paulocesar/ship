@@ -46,6 +46,16 @@ describe('ship field validator', function () {
 			.html().should.match(/ser vazio/);
 	});
 
+	it('should show "not zero" error', function () {
+		createForm('not-zero');
+
+		ship.fieldValidator.apply($form);
+		$field.focusin().val(0).focusout();
+
+		$form.find('.error-message')
+			.html().should.match(/ser zero/);
+	});
+
 	it('clear validator', function () {
 		createForm('not-empty');
 
