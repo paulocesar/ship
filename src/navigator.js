@@ -8,14 +8,18 @@
 	var displaysByName = {};
 	var previousPage = '';
 
-	var router = Backbone.Router.extend({
+	var Router = Backbone.Router.extend({
 		routes: {
 			"/:name/:id": "goToPage"
 		},
 
 		goToPage: function (name, id) {
-			if (previousPage === name || !displaysByName[name]) {
+			if (previousPage === name) {
 				return;
+			}
+
+			if (!displaysByName[name]) {
+				throw new Error("'" + name + "' display is missing");
 			}
 
 			if (previousPage) {
@@ -23,7 +27,7 @@
 			}
 
 			$('.display').hide();
-			$('#diplay-' + name).show();
+			$('#display-' + name).show();
 
 			displaysByName[name].onShow(id);
 
@@ -32,19 +36,31 @@
 	});
 
 	var Display = Backbone.View.extend({
-		subTemplates: { },
+		subTpls: { },
 
 		constructor: function () {
-			if (typeof this.name === 'string') {
+			if (typeof this.name !== 'string') {
 				throw new Error("You must set a name to display class");
 			}
 
-			var name = this.name;
+			this.name = $.trim(this.name);
 
-			this.el = "#display-" + name;
-			this.template = _.template($("#tpl-display-" + name).html());
+			var name = this.name,
+				displayId = "#display-" + name,
+				tplId = "#tpl-display-" + name,
+				subTplPath = "subTpl-display-" + name + '-',
+				subTpls = this.subTpls;
+
+			this.template = _.template($(tplId).html());
+
+			$("[id^='" + subTplPath + "']").each(function () {
+				var subName = $(this).attr('id').replace(subTplPath, '');
+				subTpls[subName] = _.template($(this).html());
+			});
 
 			Backbone.View.apply(this, arguments);
+
+			this.setElement(displayId);
 
 			this.render();
 			ship.fieldValidator.apply(this.$el);
@@ -56,7 +72,7 @@
 
 		render: function () {
 			this.$el.html(this.template({
-				subTemplates: this.subTemplates
+				subTpls: this.subTpls
 			}));
 		},
 
@@ -73,10 +89,12 @@
 	});
 
 	ship.navigator = {
-		router: router,
 		Display: Display,
 
-		go: function (name) { router.goToPage(name); },
+		go: function (name) {
+			this.router.navigate(name);
+			this.router.goToPage(name);
+		},
 
 		addDisplay: function (DisplayClass) {
 			var d = new DisplayClass();
@@ -91,8 +109,10 @@
 
 		start: function (displays) {
 			displays = displays || [];
-			ship.navigator.addDisplays(displays);
+			this.addDisplays(displays);
+
 			Backbone.history.start();
+			this.router = new Router();
 		}
 	};
 
