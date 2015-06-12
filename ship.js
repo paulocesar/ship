@@ -274,6 +274,7 @@
 	});
 
 	var Display = Backbone.View.extend({
+		tpls: {},
 		subTpls: { },
 
 		constructor: function () {
@@ -285,33 +286,25 @@
 
 			var name = this.name,
 				displayId = "#display-" + name,
-				tplId = "#tpl-display-" + name,
+				tplPath = "tpl-display-" + name + '-',
 				subTplPath = "subTpl-display-" + name + '-',
+				tpls = this.tpls,
 				subTpls = this.subTpls;
 
-			this.template = _.template($(tplId).html());
-
-			$("[id^='" + subTplPath + "']").each(function () {
-				var subName = $(this).attr('id').replace(subTplPath, '');
-				subTpls[subName] = _.template($(this).html());
+			$("[id^='" + tplPath + "']").each(function () {
+				var subName = $(this).attr('id').replace(tplPath, '');
+				tpls[subName] = _.template($(this).html());
 			});
 
 			Backbone.View.apply(this, arguments);
 
 			this.setElement(displayId);
 
-			this.render();
 			ship.fieldValidator.apply(this.$el);
 		},
 
 		$f: function (name) {
 			return this.$("[name='" + name + "']");
-		},
-
-		render: function () {
-			this.$el.html(this.template({
-				subTpls: this.subTpls
-			}));
 		},
 
 		onShow: function () {
@@ -328,10 +321,15 @@
 
 	ship.navigator = {
 		Display: Display,
+		displaysByName: displaysByName,
 
 		go: function (name) {
 			this.router.navigate(name);
 			this.router.goToPage(name);
+		},
+
+		getDisplay: function (name) {
+			return displaysByName[name];
 		},
 
 		addDisplay: function (DisplayClass) {
