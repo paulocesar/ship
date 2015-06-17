@@ -3,12 +3,13 @@ module.exports = function (config) {
         basePath: '',
         frameworks: [ 'mocha' ],
         files: [
-            'node_modules/underscore/underscore.js',
             'node_modules/jquery/dist/jquery.js',
+            'node_modules/underscore/underscore.js',
             'node_modules/backbone/backbone.js',
-            'node_modules/jquery-maskmoney/dist/jquery.maskMoney.js',
+            'node_modules/bootstrap/dist/js/bootstrap.js',
             'node_modules/moment/moment.js',
             'node_modules/moment/locale/br.js',
+            'node_modules/jquery-maskmoney/dist/jquery.maskMoney.js',
             'ship.js',
             'node_modules/should/should.js',
             'specs/**/*.spec.js'

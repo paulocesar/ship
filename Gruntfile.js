@@ -17,6 +17,17 @@ module.exports = function (grunt) {
             }
         },
 
+        cssmin: {
+            target: {
+                files: {
+                    'prod/ship.min.css': [
+                        'node_modules/bootstrap/dist/css/bootstrap.css',
+                        'ship.css'
+                    ]
+                }
+            }
+        },
+
         concat: {
             options: {
                 stripBanners: true,
@@ -44,12 +55,13 @@ module.exports = function (grunt) {
             prod: {
                 files: {
                     'prod/ship.min.js': [
-                        'node_modules/underscore/underscore.js',
                         'node_modules/jquery/dist/jquery.js',
+                        'node_modules/underscore/underscore.js',
                         'node_modules/backbone/backbone.js',
-                        'node_modules/jquery-maskmoney/dist/jquery.maskMoney.js',
+                        'node_modules/bootstrap/dist/js/bootstrap.js',
                         'node_modules/moment/moment.js',
                         'node_modules/moment/locale/br.js',
+                        'node_modules/jquery-maskmoney/dist/jquery.maskMoney.js',
                         'ship.js'
                     ]
                 }
@@ -66,8 +78,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jst');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('default', [ 'jst', 'concat', 'test', 'uglify:prod' ]);
+    grunt.registerTask('default', [ 'cssmin', 'jst', 'concat', 'test', 'uglify:prod' ]);
     grunt.registerTask('test', [ 'karma:unit' ]);
 };
