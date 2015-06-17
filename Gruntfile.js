@@ -2,6 +2,21 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        jst: {
+            compile: {
+                options: {
+                    processName: function (filePath) {
+                        return filePath
+                            .replace('src/templates/', '')
+                            .replace('.html', '');
+                    }
+                },
+                files: {
+                    'src/templates.js': ['src/templates/**/*.html']
+                }
+            }
+        },
+
         concat: {
             options: {
                 stripBanners: true,
@@ -11,13 +26,15 @@ module.exports = function (grunt) {
 
             dist: {
                 src: [
+                    'src/templates.js',
                     'src/index.js',
                     'src/string.js',
                     'src/ajax.js',
                     'src/money.js',
                     'src/field-validator.js',
                     'src/navigator.js',
-                    'src/field-mask.js'
+                    'src/field-mask.js',
+                    'src/components/**/*.js'
                 ],
                 dest: 'ship.js'
             }
@@ -48,8 +65,9 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('default', [ 'concat', 'test', 'uglify:prod' ]);
+    grunt.registerTask('default', [ 'jst', 'concat', 'test', 'uglify:prod' ]);
     grunt.registerTask('test', [ 'karma:unit' ]);
 };

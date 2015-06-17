@@ -33,6 +33,8 @@ describe('ship field validator', function () {
 		$field.focusin().val('hello').focusout();
 
 		$form.find('.error-message').length.should.eql(0);
+
+		removeForm();
 	});
 
 
@@ -44,6 +46,8 @@ describe('ship field validator', function () {
 
 		$form.find('.error-message')
 			.html().should.match(/ser vazio/);
+
+		removeForm();
 	});
 
 	it('should show "not zero" error', function () {
@@ -54,6 +58,8 @@ describe('ship field validator', function () {
 
 		$form.find('.error-message')
 			.html().should.match(/ser zero/);
+
+		removeForm();
 	});
 
 	it('clear validator', function () {
@@ -64,5 +70,7 @@ describe('ship field validator', function () {
 		ship.fieldValidator.reset($form);
 
 		$form.find('.error-message').length.should.eql(0);
+
+		removeForm();
 	});
 });

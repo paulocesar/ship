@@ -1,5 +1,7 @@
 (function(scope) {
 
-    var ship = scope.ship = {};
+    var ship = scope.ship = {
+        components: {}
+    };
 
 })(window);

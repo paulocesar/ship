@@ -1,7 +1,24 @@
-/*! ship - v0.0.1 - 2015-06-12 */
+/*! ship - v0.0.1 - 2015-06-17 */
+this["JST"] = this["JST"] || {};
+
+this["JST"]["loading"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class="ship-loader">\n    <img src=\'' +
+((__t = ( src )) == null ? '' : __t) +
+'\'> <div>' +
+((__t = ( label )) == null ? '' : __t) +
+'</div>\n</div>\n';
+
+}
+return __p
+};
 (function(scope) {
 
-    var ship = scope.ship = {};
+    var ship = scope.ship = {
+        components: {}
+    };
 
 })(window);
 
@@ -354,3 +371,18 @@
 
 })(window);
 
+
+(function (scope) {
+    var ship = scope.ship;
+    var JST = scope.JST;
+
+    ship.components.loading = {
+        html: function (src, label) {
+            return JST.loading({ src: src, label: label });
+        },
+
+        show: function () { $('.ship-loader').show(); },
+        hide: function () { $('.ship-loader').hide(); }
+    };
+
+})(window);

@@ -11,7 +11,7 @@ module.exports = function (config) {
             'node_modules/moment/locale/br.js',
             'ship.js',
             'node_modules/should/should.js',
-            'specs/*.spec.js'
+            'specs/**/*.spec.js'
         ],
         exclude: [ ],
         reporters: [ 'progress' ],
