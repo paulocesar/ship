@@ -22,6 +22,7 @@ module.exports = function (grunt) {
                 files: {
                     'prod/ship.min.css': [
                         'node_modules/bootstrap/dist/css/bootstrap.css',
+                        'node_modules/cropper/dist/cropper.css',
                         'ship.css'
                     ]
                 }
@@ -62,6 +63,7 @@ module.exports = function (grunt) {
                         'node_modules/moment/moment.js',
                         'node_modules/moment/locale/br.js',
                         'node_modules/jquery-maskmoney/dist/jquery.maskMoney.js',
+                        'node_modules/cropper/dist/cropper.js',
                         'ship.js'
                     ]
                 }
