@@ -9,13 +9,10 @@
         dragCrop: false,
         rotatable:false,
         zoomable: false,
-        cropBoxMovable: false,
-        cropBoxResizable: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
         mouseWheelZoom: false,
-        touchDragZoom: false,
-        crop: function (data) {
-            console.log(data);
-        }
+        touchDragZoom: false
     };
 
     var ImageCropper = Backbone.View.extend({
@@ -28,11 +25,14 @@
 
         initialize: function (options) {
             this.$img = this.$('img');
-            this.$img.cropper(_.defaults(options, defaultData));
+            this.imageOptions = options || {}
+            _.defaults(this.imageOptions, defaultData);
+            this.$img.cropper(this.imageOptions);
         },
 
         uploadImage: function (postData, callback) {
             var $img = this.$img;
+            var options = this.imageOptions;
             var $canvasImg = this.$('.cropper-canvas > img');
             var $viewBoxImg = this.$('.cropper-view-box > img');
 
@@ -49,9 +49,10 @@
                 error: function (err) { console.log(err); },
 
                 success: function (res) {
+                    $img.cropper('destroy');
                     $img.attr('src', res.src);
-                    $canvasImg.attr('src', res.src);
-                    $viewBoxImg.attr('src', res.src);
+                    $img.cropper(options);
+
                     callback();
                 },
 
@@ -79,6 +80,8 @@
             callback = callback || function () {};
 
             var data = this.$img.cropper('getData');
+
+            var imageData = this.$img.cropper('getImageData');
 
             return $.ajax({
                 url: this.url.crop,
