@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-07-03 */
+/*! ship - v0.0.1 - 2015-07-04 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["image-cropper"] = function(obj) {
@@ -396,7 +396,9 @@ return __p
         cropBoxMovable: true,
         cropBoxResizable: true,
         mouseWheelZoom: false,
-        touchDragZoom: false
+        touchDragZoom: false,
+        resizeX: 150,
+        resizeY: 150
     };
 
     var ImageCropper = Backbone.View.extend({
@@ -464,8 +466,9 @@ return __p
             callback = callback || function () {};
 
             var data = this.$img.cropper('getData');
-
-            var imageData = this.$img.cropper('getImageData');
+            data.src = this.$img.attr('src');
+            data.resizeX = this.imageOptions.resizeX;
+            data.resizeY = this.imageOptions.resizeY;
 
             return $.ajax({
                 url: this.url.crop,
