@@ -85,4 +85,5 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [ 'cssmin', 'jst', 'concat', 'test', 'uglify:prod' ]);
     grunt.registerTask('test', [ 'karma:unit' ]);
+    grunt.registerTask('build', [ 'cssmin', 'jst', 'concat', 'uglify:prod' ]);
 };

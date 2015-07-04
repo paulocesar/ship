@@ -79,6 +79,7 @@
         },
 
         crop: function (callback) {
+            var self = this;
             callback = callback || function () {};
 
             var data = this.$img.cropper('getData');
@@ -93,7 +94,8 @@
                 cache: false,
 
                 success: function (res) {
-                    callback();
+                    self.dest = res.src;
+                    callback(res);
                 },
 
             });
