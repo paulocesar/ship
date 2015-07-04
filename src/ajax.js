@@ -16,7 +16,7 @@
         return this.ajax('get', url, data);
     };
 
-    ship.post = function (action, data) {
+    ship.post = function (url, data) {
         return this.ajax('post', url, data);
     };
 

@@ -10,6 +10,7 @@ module.exports = function (config) {
             'node_modules/moment/moment.js',
             'node_modules/moment/locale/br.js',
             'node_modules/jquery-maskmoney/dist/jquery.maskMoney.js',
+            'node_modules/cropper/dist/cropper.js',
             'ship.js',
             'node_modules/should/should.js',
             'specs/**/*.spec.js'

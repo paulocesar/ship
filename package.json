@@ -5,6 +5,7 @@
   "dependencies": {},
   "devDependencies": {
     "backbone": "^1.2.1",
+    "cropper": "^0.10.0",
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-cssmin": "^0.12.3",
