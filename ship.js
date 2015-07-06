@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-07-04 */
+/*! ship - v0.0.1 - 2015-07-05 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["image-cropper"] = function(obj) {
@@ -6,6 +6,35 @@ obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
 __p += '<div class="cropper-container"><img src="/images/image-cropper.jpg" /></div>\n';
+
+}
+return __p
+};
+
+this["JST"]["list-async"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'></div>\n</div>\n';
+
+}
+return __p
+};
+
+this["JST"]["list-item"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
+
+ _.each(displayFields, function (field) { ;
+__p += '\n    <span class=\'field ' +
+((__t = ( field )) == null ? '' : __t) +
+'\'>' +
+((__t = ( model[field] )) == null ? '' : __t) +
+'</span>\n';
+ }); ;
+__p += '\n';
 
 }
 return __p
@@ -488,6 +517,81 @@ return __p
 
     ship.components.ImageCropper = ImageCropper;
 
+})(window);
+
+(function (scope) {
+    var _ = scope._;
+    var JST = scope.JST;
+    var ship = scope.ship;
+
+    var ItemView = Backbone.View.extend({
+        tagName: 'li',
+        template: JST["list-item"],
+
+        initialize: function (options) {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.destroy);
+
+            this.displayFields = options.displayFields
+                || _.keys(this.model.attributes);
+        },
+
+        render: function () {
+            this.$el.html(this.template({
+                model: this.model.toJSON(),
+                displayFields: this.displayFields
+            }));
+            return this;
+        }
+    });
+
+    var ListView = Backbone.View.extend({
+        tagName: 'ul',
+        className: 'list',
+
+        initialize: function (options) {
+            var collection = options.collection;
+            this.listenTo(collection, 'add', this.addOne);
+            this.listenTo(collection, 'reset', this.addAll);
+
+            this.displayFields = options.displayFields;
+        },
+
+        addOne: function (item) {
+            var view = new ItemView({
+                model: item,
+                displayFields: this.displayFields
+            });
+
+            this.$el.append(view.render().el);
+        },
+
+        addAll: function () {
+            this.$el.html('');
+            this.collection.each(this.addOne, this);
+        }
+    });
+
+    var AsyncList = Backbone.View.extend({
+        tagName: 'div',
+        className: 'scroll-wrapper',
+        template: JST['list-async'],
+        limit: 10,
+
+        initialize: function (options) {
+            this.limit = options.limit || this.limit;
+            this.listView = new ListView(options);
+        },
+
+        render: function () {
+            this.$el.append(this.template());
+            this.listView.setElement(this.$('ul.list'));
+            return this;
+        }
+    });
+
+    ship.components.ListView = ListView;
+    ship.components.AsyncList = AsyncList;
 })(window);
 
 (function (scope) {
