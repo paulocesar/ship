@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-07-05 */
+/*! ship - v0.0.1 - 2015-07-08 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["image-cropper"] = function(obj) {
@@ -15,7 +15,7 @@ this["JST"]["list-async"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'></div>\n</div>\n';
+__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'>\n        carregando...\n    </div>\n</div>\n';
 
 }
 return __p
@@ -555,6 +555,28 @@ return __p
             this.listenTo(collection, 'reset', this.addAll);
 
             this.displayFields = options.displayFields;
+        }
+    });
+
+    // TODO: MERGE ListView and AsyncList
+    var List = Backbone.View.extend({
+        tagName: 'div',
+        className: 'scroll-wrapper',
+        template: JST['list-async'],
+
+        initialize: function (options) {
+            var collection = options.collection;
+            this.listenTo(collection, 'add', this.addOne);
+            this.listenTo(collection, 'reset', this.addAll);
+
+            this.displayFields = options.displayFields;
+        },
+
+        render: function () {
+            this.$el.append(this.template());
+            this.$list = this.$('ul.list');
+            this.$loading = this.$('list-loading');
+            return this;
         },
 
         addOne: function (item) {
@@ -563,35 +585,32 @@ return __p
                 displayFields: this.displayFields
             });
 
-            this.$el.append(view.render().el);
+            this.$list.append(view.render().el);
         },
 
         addAll: function () {
-            this.$el.html('');
+            this.$list.html('');
             this.collection.each(this.addOne, this);
-        }
-    });
-
-    var AsyncList = Backbone.View.extend({
-        tagName: 'div',
-        className: 'scroll-wrapper',
-        template: JST['list-async'],
-        limit: 10,
-
-        initialize: function (options) {
-            this.limit = options.limit || this.limit;
-            this.listView = new ListView(options);
         },
 
-        render: function () {
-            this.$el.append(this.template());
-            this.listView.setElement(this.$('ul.list'));
-            return this;
-        }
+        isScrollOnEnd: function () {
+            var isEnded = false
+
+            this.$el('.scrollable').on('scroll', function() {
+                var $s = $(this);
+                if($s.scrollTop() + $s.innerHeight() >= this.scrollHeight) {
+                    isEnded = true;
+                }
+            });
+
+            return isEnded;
+        },
+
+        showLoading: function () { this.$loading.show(); },
+        hideLoading: function () { this.$loading.hide(); }
     });
 
-    ship.components.ListView = ListView;
-    ship.components.AsyncList = AsyncList;
+    ship.components.List = List;
 })(window);
 
 (function (scope) {

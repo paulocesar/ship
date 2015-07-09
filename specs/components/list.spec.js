@@ -14,28 +14,16 @@ c.add([ new Model(), new Model() ]);
 
 describe('ship component list', function () {
 
-    it('should create a listView', function () {
-        var list = new ship.components.ListView({
+    it('should create a list', function () {
+        var list = new ship.components.List({
             collection: c,
             displayFields: [ 'name' ]
         });
 
-        $('body').append(list.el);
+        $('body').append(list.render().el);
         list.addAll();
 
-        console.log(list.$el.html());
-    });
-
-    it('should create an async list', function () {
-        var asyncList = new ship.components.AsyncList({
-            collection: c,
-            displayFields: [ 'name' ]
-        });
-
-        $('body').append(asyncList.render().el);
-        asyncList.listView.addAll();
-
-        console.log(asyncList.$el.parent().html());
+        list.$('li').length.should.eql(2);
     });
 
 });

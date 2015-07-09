@@ -14,7 +14,7 @@ this["JST"]["list-async"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'></div>\n</div>\n';
+__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'>\n        carregando...\n    </div>\n</div>\n';
 
 }
 return __p

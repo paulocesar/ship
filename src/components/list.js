@@ -34,6 +34,28 @@
             this.listenTo(collection, 'reset', this.addAll);
 
             this.displayFields = options.displayFields;
+        }
+    });
+
+    // TODO: MERGE ListView and AsyncList
+    var List = Backbone.View.extend({
+        tagName: 'div',
+        className: 'scroll-wrapper',
+        template: JST['list-async'],
+
+        initialize: function (options) {
+            var collection = options.collection;
+            this.listenTo(collection, 'add', this.addOne);
+            this.listenTo(collection, 'reset', this.addAll);
+
+            this.displayFields = options.displayFields;
+        },
+
+        render: function () {
+            this.$el.append(this.template());
+            this.$list = this.$('ul.list');
+            this.$loading = this.$('list-loading');
+            return this;
         },
 
         addOne: function (item) {
@@ -42,28 +64,12 @@
                 displayFields: this.displayFields
             });
 
-            this.$el.append(view.render().el);
+            this.$list.append(view.render().el);
         },
 
         addAll: function () {
-            this.$el.html('');
+            this.$list.html('');
             this.collection.each(this.addOne, this);
-        }
-    });
-
-    var AsyncList = Backbone.View.extend({
-        tagName: 'div',
-        className: 'scroll-wrapper',
-        template: JST['list-async'],
-
-        initialize: function (options) {
-            this.listView = new ListView(options);
-        },
-
-        render: function () {
-            this.$el.append(this.template());
-            this.listView.setElement(this.$('ul.list'));
-            return this;
         },
 
         isScrollOnEnd: function () {
@@ -79,15 +85,9 @@
             return isEnded;
         },
 
-        showLoading: function () {
-            this.$('list-loading').show();
-        },
-
-        hideLoading: function () {
-            this.$('list-loading').hide();
-        }
+        showLoading: function () { this.$loading.show(); },
+        hideLoading: function () { this.$loading.hide(); }
     });
 
-    ship.components.ListView = ListView;
-    ship.components.AsyncList = AsyncList;
+    ship.components.List = List;
 })(window);
