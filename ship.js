@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-07-08 */
+/*! ship - v0.0.1 - 2015-07-11 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["image-cropper"] = function(obj) {
@@ -545,20 +545,6 @@ return __p
         }
     });
 
-    var ListView = Backbone.View.extend({
-        tagName: 'ul',
-        className: 'list',
-
-        initialize: function (options) {
-            var collection = options.collection;
-            this.listenTo(collection, 'add', this.addOne);
-            this.listenTo(collection, 'reset', this.addAll);
-
-            this.displayFields = options.displayFields;
-        }
-    });
-
-    // TODO: MERGE ListView and AsyncList
     var List = Backbone.View.extend({
         tagName: 'div',
         className: 'scroll-wrapper',

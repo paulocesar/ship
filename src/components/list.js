@@ -24,20 +24,6 @@
         }
     });
 
-    var ListView = Backbone.View.extend({
-        tagName: 'ul',
-        className: 'list',
-
-        initialize: function (options) {
-            var collection = options.collection;
-            this.listenTo(collection, 'add', this.addOne);
-            this.listenTo(collection, 'reset', this.addAll);
-
-            this.displayFields = options.displayFields;
-        }
-    });
-
-    // TODO: MERGE ListView and AsyncList
     var List = Backbone.View.extend({
         tagName: 'div',
         className: 'scroll-wrapper',
