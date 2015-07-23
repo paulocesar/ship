@@ -5,21 +5,16 @@
 
     var ItemView = Backbone.View.extend({
         tagName: 'li',
-        template: JST["list-item"],
 
         initialize: function (options) {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.destroy);
 
-            this.displayFields = options.displayFields
-                || _.keys(this.model.attributes);
+            this.template = options.template;
         },
 
         render: function () {
-            this.$el.html(this.template({
-                model: this.model.toJSON(),
-                displayFields: this.displayFields
-            }));
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
     });
@@ -27,14 +22,14 @@
     var List = Backbone.View.extend({
         tagName: 'div',
         className: 'scroll-wrapper',
-        template: JST['list-async'],
+        template: JST['list'],
 
         initialize: function (options) {
             var collection = options.collection;
             this.listenTo(collection, 'add', this.addOne);
             this.listenTo(collection, 'reset', this.addAll);
 
-            this.displayFields = options.displayFields;
+            this.templateItem = options.templateItem;
         },
 
         render: function () {
@@ -47,7 +42,7 @@
         addOne: function (item) {
             var view = new ItemView({
                 model: item,
-                displayFields: this.displayFields
+                template: this.templateItem
             });
 
             this.$list.append(view.render().el);

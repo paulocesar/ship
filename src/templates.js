@@ -1,20 +1,20 @@
 this["JST"] = this["JST"] || {};
 
-this["JST"]["image-cropper"] = function(obj) {
+this["JST"]["edit-display"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class="cropper-container"><img src="/images/image-cropper.jpg" /></div>\n';
+__p += '<div>\n    <div class=\'container-list\'></div>\n    <div class=\'container-form\'></div>\n</div>\n';
 
 }
 return __p
 };
 
-this["JST"]["list-async"] = function(obj) {
+this["JST"]["image-cropper"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'>\n        carregando...\n    </div>\n</div>\n';
+__p += '<div class="cropper-container"><img src="/images/image-cropper.jpg" /></div>\n';
 
 }
 return __p
@@ -34,6 +34,16 @@ __p += '\n    <span class=\'field ' +
 '</span>\n';
  }); ;
 __p += '\n';
+
+}
+return __p
+};
+
+this["JST"]["list"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape;
+with (obj) {
+__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'>\n        carregando...\n    </div>\n</div>\n';
 
 }
 return __p

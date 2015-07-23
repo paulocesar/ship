@@ -17,7 +17,7 @@ describe('ship component list', function () {
     it('should create a list', function () {
         var list = new ship.components.List({
             collection: c,
-            displayFields: [ 'name' ]
+            templateItem: _.template("<span><%= name %></span>")
         });
 
         $('body').append(list.render().el);
