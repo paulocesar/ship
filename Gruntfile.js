@@ -7,8 +7,8 @@ module.exports = function (grunt) {
                 options: {
                     processName: function (filePath) {
                         return filePath
-                            .replace('src/templates/', '')
-                            .replace('.html', '');
+                        .replace('src/templates/', '')
+                        .replace('.html', '');
                     }
                 },
                 files: {

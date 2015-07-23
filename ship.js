@@ -388,6 +388,7 @@ return __p
 	ship.navigator = {
 		Display: Display,
 		displaysByName: displaysByName,
+        isStarted: false,
 
 		go: function (name) {
 			this.router.navigate(name);
@@ -413,8 +414,11 @@ return __p
 			displays = displays || [];
 			this.addDisplays(displays);
 
+            if (this.isStarted) { return; }
+
 			Backbone.history.start();
 			this.router = new Router();
+            this.isStarted = true;
 		}
 	};
 
