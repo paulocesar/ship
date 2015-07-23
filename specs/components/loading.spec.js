@@ -1,6 +1,6 @@
 var $loading = null;
 
-var createLoading = function (label, src) {
+var createLoading = function(label, src) {
     removeLoading();
 
     var loading = ship.components.loading;
@@ -11,18 +11,22 @@ var createLoading = function (label, src) {
     $loading = $('.ship-loader');
 }
 
-var removeLoading = function () {
-    if (!$loading) { return; }
+var removeLoading = function() {
+    if (!$loading) {
+        return;
+    }
 
     $loading.remove();
     $loading = null;
 }
 
-describe('ship component loading', function () {
-    after(function () { removeLoading(); });
+describe('ship component loading', function() {
+    after(function() {
+        removeLoading();
+    });
 
 
-    it('should create a loading', function () {
+    it('should create a loading', function() {
         createLoading('exemplo');
 
         var expected = '<img src=""> <div>exemplo</div>'
@@ -31,7 +35,7 @@ describe('ship component loading', function () {
         removeLoading();
     });
 
-    it('should hide loading', function () {
+    it('should hide loading', function() {
         createLoading('exemplo');
 
         ship.components.loading.hide();
@@ -40,7 +44,7 @@ describe('ship component loading', function () {
         removeLoading();
     });
 
-    it('should show loading', function () {
+    it('should show loading', function() {
         createLoading('exemplo');
 
         ship.components.loading.hide();

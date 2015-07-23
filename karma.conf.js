@@ -1,7 +1,7 @@
-module.exports = function (config) {
+module.exports = function(config) {
     config.set({
         basePath: '',
-        frameworks: [ 'mocha' ],
+        frameworks: ['mocha'],
         files: [
             'node_modules/jquery/dist/jquery.js',
             'node_modules/underscore/underscore.js',
@@ -15,13 +15,13 @@ module.exports = function (config) {
             'node_modules/should/should.js',
             'specs/**/*.spec.js'
         ],
-        exclude: [ ],
-        reporters: [ 'progress' ],
+        exclude: [],
+        reporters: ['progress'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
         authWatch: false,
-        browsers: [ 'Chrome' ],
+        browsers: ['Chrome'],
         captureTimeout: 60000,
         singleRun: true
     });

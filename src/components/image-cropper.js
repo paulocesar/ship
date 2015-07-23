@@ -1,4 +1,4 @@
-(function (scope) {
+(function(scope) {
     var ship = scope.ship;
     var Backbone = scope.Backbone;
 
@@ -7,7 +7,7 @@
         strict: false,
         highlight: false,
         dragCrop: false,
-        rotatable:false,
+        rotatable: false,
         zoomable: false,
         cropBoxMovable: true,
         cropBoxResizable: true,
@@ -25,20 +25,20 @@
             crop: '/image/crop'
         },
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.$img = this.$('img');
             this.imageOptions = options || {}
             _.defaults(this.imageOptions, defaultData);
             this.$img.cropper(this.imageOptions);
         },
 
-        uploadImage: function (postData, callback) {
+        uploadImage: function(postData, callback) {
             var $img = this.$img;
             var options = this.imageOptions;
             var $canvasImg = this.$('.cropper-canvas > img');
             var $viewBoxImg = this.$('.cropper-view-box > img');
 
-            callback = callback || function () {};
+            callback = callback || function() {};
 
             return $.ajax({
                 url: this.url.upload,
@@ -48,9 +48,11 @@
                 contentType: false,
                 processData: false,
 
-                error: function (err) { console.log(err); },
+                error: function(err) {
+                    console.log(err);
+                },
 
-                success: function (res) {
+                success: function(res) {
                     $img.cropper('destroy');
                     $img.attr('src', res.src);
                     $img.cropper(options);
@@ -58,14 +60,14 @@
                     callback();
                 },
 
-                xhr: function () {
+                xhr: function() {
                     var xhr = $.ajaxSettings.xhr();
 
                     if (xhr.upload) {
                         xhr.upload.addEventListener(
                             'progress',
-                            function progressHandlingFunction(e){
-                                if(e.lengthComputable){
+                            function progressHandlingFunction(e) {
+                                if (e.lengthComputable) {
                                     console.log(e.loaded, e.total);
                                 }
                             },
@@ -78,9 +80,9 @@
             });
         },
 
-        crop: function (callback) {
+        crop: function(callback) {
             var self = this;
-            callback = callback || function () {};
+            callback = callback || function() {};
 
             var data = this.$img.cropper('getData');
             data.src = this.$img.attr('src');
@@ -93,7 +95,7 @@
                 data: data,
                 cache: false,
 
-                success: function (res) {
+                success: function(res) {
                     self.dest = res.src;
                     callback(res);
                 },

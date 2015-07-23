@@ -1,14 +1,14 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
         jst: {
             compile: {
                 options: {
-                    processName: function (filePath) {
+                    processName: function(filePath) {
                         return filePath
-                        .replace('src/templates/', '')
-                        .replace('.html', '');
+                            .replace('src/templates/', '')
+                            .replace('.html', '');
                     }
                 },
                 files: {
@@ -83,7 +83,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('default', [ 'cssmin', 'jst', 'concat', 'test', 'uglify:prod' ]);
-    grunt.registerTask('test', [ 'karma:unit' ]);
-    grunt.registerTask('build', [ 'cssmin', 'jst', 'concat', 'uglify:prod' ]);
+    grunt.registerTask('default', ['cssmin', 'jst', 'concat', 'test', 'uglify:prod']);
+    grunt.registerTask('test', ['karma:unit']);
+    grunt.registerTask('build', ['cssmin', 'jst', 'concat', 'uglify:prod']);
 };

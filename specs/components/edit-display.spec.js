@@ -1,9 +1,12 @@
 var count = 0;
 
 var Model = Backbone.Model.extend({
-    defaults: function () {
+    defaults: function() {
         count++;
-        return { id: count, name: 'Model ' + count };
+        return {
+            id: count,
+            name: 'Model ' + count
+        };
     },
 });
 
@@ -12,12 +15,12 @@ var Collection = Backbone.Collection.extend({
 });
 
 var c = new Collection();
-c.add([ new Model(), new Model() ]);
+c.add([new Model(), new Model()]);
 
 $('body').append("<div id='display-edit' class='display'></div>")
 
-describe('ship edit display', function () {
-    it('should create a editable display', function () {
+describe('ship edit display', function() {
+    it('should create a editable display', function() {
 
         var ShipEditDisplay = ship.components.EditDisplay.extend({
             name: 'edit',
@@ -26,7 +29,7 @@ describe('ship edit display', function () {
             templateItem: _.template("<span><%= name %></span>")
         });
 
-        ship.navigator.start([ ShipEditDisplay ]);
+        ship.navigator.start([ShipEditDisplay]);
         ship.navigator.go('edit');
 
         var d = ship.navigator.getDisplay('edit');

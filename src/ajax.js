@@ -2,9 +2,11 @@
     var ship = scope.ship;
     var $ = scope.$;
 
-    $.ajaxSetup({ cache: false });
+    $.ajaxSetup({
+        cache: false
+    });
 
-    ship.ajax = function (method, url, data) {
+    ship.ajax = function(method, url, data) {
         return $.ajax(url, {
             method: method,
             data: JSON.stringify(data),
@@ -12,15 +14,15 @@
         });
     };
 
-    ship.get = function (url, data) {
+    ship.get = function(url, data) {
         return this.ajax('get', url, data);
     };
 
-    ship.post = function (url, data) {
+    ship.post = function(url, data) {
         return this.ajax('post', url, data);
     };
 
-    ship.eval = function (data) {
+    ship.eval = function(data) {
         return (new Function("return " + data + ";"))();
     };
 

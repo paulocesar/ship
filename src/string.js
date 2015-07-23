@@ -1,4 +1,4 @@
-(function (scope) {
+(function(scope) {
     var ship = scope.ship;
     var $ = scope.$;
 
@@ -12,11 +12,11 @@
     var rgxTag = /\<[^>]*\>/g
     var rgxUnwatedChars = /[,.$-]/g
 
-    str.sanitize = function (str) {
+    str.sanitize = function(str) {
         return $.trim(
             str.replace(rgxWhitespace, ' ')
-                .replace(rgxTag, '')
-                .replace(rgxUnwatedChars, '')
+            .replace(rgxTag, '')
+            .replace(rgxUnwatedChars, '')
         );
     };
 
