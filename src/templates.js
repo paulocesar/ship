@@ -4,7 +4,7 @@ this["JST"]["edit-display"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div>\n    <div class=\'container-list\'></div>\n    <div class=\'container-form\'></div>\n</div>\n';
+__p += '<div class=\'row\'>\n    <div class=\'container-list col-md-6\'></div>\n    <div class=\'container-form col-md-6\'></div>\n</div>\n';
 
 }
 return __p

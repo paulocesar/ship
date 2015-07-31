@@ -4,18 +4,25 @@
     var Display = ship.navigator.Display;
 
     var EditDisplay = Display.extend({
+        name: 'edit',
+
         template: JST['edit-display'],
 
-        initialize: function(options) {
+        start: function(options) {
+            this.templateForm = options.templateForm;
+
             this.list = new ship.components.List({
-                collection: this.collection,
-                templateItem: this.templateItem
+                collection: options.collection,
+                templateItem: options.templateItem
             });
+
+            this.render()
         },
 
         render: function() {
             this.$el.html(this.template());
             this.$('.container-list').append(this.list.render().el);
+            this.list.addAll();
             this.$('.container-form').html(this.templateForm());
         }
     });
