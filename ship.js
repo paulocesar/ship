@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-07-25 */
+/*! ship - v0.0.1 - 2015-08-01 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["edit-display"] = function(obj) {
@@ -464,13 +464,12 @@ return __p
                 templateItem: options.templateItem
             });
 
-            this.render()
+            this.render();
         },
 
         render: function() {
             this.$el.html(this.template());
             this.$('.container-list').append(this.list.render().el);
-            this.list.addAll();
             this.$('.container-form').html(this.templateForm());
         }
     });
@@ -614,19 +613,51 @@ return __p
         tagName: 'div',
         className: 'scroll-wrapper',
         template: JST['list'],
+        limit: 100,
 
         initialize: function(options) {
             var collection = options.collection;
             this.listenTo(collection, 'add', this.addOne);
             this.listenTo(collection, 'reset', this.addAll);
+            this.listenTo(collection, 'request', this.startRequest);
+            this.listenTo(collection, 'sync', this.endRequest);
 
             this.templateItem = options.templateItem;
+        },
+
+        loadFirstPage: function () {
+            this.page = 1;
+            this.collection.fetch({
+                data: $.param({
+                    page: this.page,
+                    limit: this.limit
+                })
+            });
+        },
+
+        loadNextPage: function () {
+            this.page++;
+            this.collection.fetch({
+                remove: false,
+                data: $.param({
+                    page: this.page,
+                    limit: this.limit
+                })
+            });
+        },
+
+        startRequest: function () {
+            this.$loading.show();
+        },
+
+        endRequest: function () {
+            this.$loading.hide();
         },
 
         render: function() {
             this.$el.append(this.template());
             this.$list = this.$('ul.list');
-            this.$loading = this.$('list-loading');
+            this.$loading = this.$('.list-loading');
             return this;
         },
 
@@ -655,13 +686,6 @@ return __p
             });
 
             return isEnded;
-        },
-
-        showLoading: function() {
-            this.$loading.show();
-        },
-        hideLoading: function() {
-            this.$loading.hide();
         }
     });
 

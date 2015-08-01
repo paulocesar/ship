@@ -16,13 +16,12 @@
                 templateItem: options.templateItem
             });
 
-            this.render()
+            this.render();
         },
 
         render: function() {
             this.$el.html(this.template());
             this.$('.container-list').append(this.list.render().el);
-            this.list.addAll();
             this.$('.container-form').html(this.templateForm());
         }
     });
