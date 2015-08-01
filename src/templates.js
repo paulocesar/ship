@@ -4,7 +4,7 @@ this["JST"]["edit-display"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class=\'row\'>\n    <div class=\'container-list col-md-6\'></div>\n    <div class=\'container-form col-md-6\'></div>\n</div>\n';
+__p += '<div class=\'row\'>\n    <div class=\'container-list col-md-6\'></div>\n    <div class=\'col-md-6\'>\n        <div class=\'container-form\'>\n        </div>\n        <div class=\'buttons\'>\n            <button class="btn btn-info new">Novo</button>\n            <button class="btn btn-danger delete">Excluir</button>\n            <button class="btn btn-success save">Salvar</button>\n        </div>\n    </div>\n</div>\n';
 
 }
 return __p
@@ -43,7 +43,7 @@ this["JST"]["list"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
-__p += '<div class=\'scrollable\'>\n    <ul class=\'list\'></ul>\n    <div class=\'list-loading\'>\n        carregando...\n    </div>\n</div>\n';
+__p += '<input name="search" />\n<div class=\'scroll-wrapper\'>\n    <div class=\'scrollable\'>\n        <ul class=\'list\'></ul>\n        <div class=\'list-loading\'>carregando...</div>\n    </div>\n</div>\n';
 
 }
 return __p

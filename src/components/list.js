@@ -21,7 +21,6 @@
 
     var List = Backbone.View.extend({
         tagName: 'div',
-        className: 'scroll-wrapper',
         template: JST['list'],
         limit: 100,
 

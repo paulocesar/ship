@@ -5,8 +5,30 @@
 
     var EditDisplay = Display.extend({
         name: 'edit',
-
         template: JST['edit-display'],
+
+        events: {
+            "click ul.list li": "onClickListItem",
+            "click .buttons .new": "onClickNewItem",
+            "click .buttons .delete": "onClickDeleteItem",
+            "click .buttons .save": "onClickSaveItem"
+        },
+
+        onClickListItem: function () {
+
+        },
+
+        onClickNewItem: function () {
+
+        },
+
+        onClickDeleteItem: function () {
+
+        },
+
+        onClickSaveItem: function () {
+
+        },
 
         start: function(options) {
             this.templateForm = options.templateForm;
