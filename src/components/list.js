@@ -6,6 +6,13 @@
     var ItemView = Backbone.View.extend({
         tagName: 'li',
 
+        attributes: function () {
+           if (this.model) {
+               return { "data-rowid": this.model.get('id') };
+           }
+           return {};
+        },
+
         initialize: function(options) {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.destroy);
@@ -24,6 +31,10 @@
         template: JST['list'],
         limit: 100,
 
+        events: {
+            "keyup input[name='search']": "onSearchInputKeyUp"
+        },
+
         initialize: function(options) {
             var collection = options.collection;
             this.listenTo(collection, 'add', this.addOne);
@@ -32,6 +43,14 @@
             this.listenTo(collection, 'sync', this.endRequest);
 
             this.templateItem = options.templateItem;
+            this.hasSearchField = !!options.searchUrl;
+
+            if (options.searchUrl) {
+                this.searchUrl = options.searchUrl;
+            }
+        },
+
+        onSearchInputKeyUp: function () {
         },
 
         loadFirstPage: function () {
@@ -66,7 +85,13 @@
         render: function() {
             this.$el.append(this.template());
             this.$list = this.$('ul.list');
+            this.$searchField = this.$('input[name="search"]');
             this.$loading = this.$('.list-loading');
+
+            if (!this.hasSearchField) {
+                this.$searchField.hide();
+            }
+
             return this;
         },
 

@@ -1,4 +1,5 @@
 (function(scope) {
+    var _ = scope._;
     var JST = scope.JST;
     var ship = scope.ship;
     var Display = ship.navigator.Display;
@@ -14,20 +15,24 @@
             "click .buttons .save": "onClickSaveItem"
         },
 
-        onClickListItem: function () {
+        onClickListItem: function (ev) {
+            var id = $(ev.currentTarget).data('rowid');
+            var item = this.list.collection.findWhere({ id: id });
 
+            item.fetch().done(_.bind(this.setItemInForm, this, item));
+        },
+
+        setItemInForm: function (item) {
+            console.log(item.get('id'));
         },
 
         onClickNewItem: function () {
-
         },
 
         onClickDeleteItem: function () {
-
         },
 
         onClickSaveItem: function () {
-
         },
 
         start: function(options) {
@@ -35,6 +40,7 @@
 
             this.list = new ship.components.List({
                 collection: options.collection,
+                searchUrl: options.collection.searchUrl,
                 templateItem: options.templateItem
             });
 

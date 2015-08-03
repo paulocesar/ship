@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-08-01 */
+/*! ship - v0.0.1 - 2015-08-03 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["edit-display"] = function(obj) {
@@ -445,8 +445,36 @@ return __p
 
 })(window);
 
+(function (scope) {
+    var ship = scope.ship;
+
+    var masks = {
+        'mask-money': function ($el) {
+            money.applyMask($el);
+        },
+
+        'mask-money-positive': function ($el) {
+            money.applyMask($el, { allowNegative: false });
+        },
+
+        'mask-money-negative': function ($el) {
+            money.applyMask($el, { allowNegative: true });
+        }
+    };
+
+    ship.fieldMask = {
+        apply: function (el) {
+            var $el = $(el);
+
+            _.each(masks, function (applyFunc, cls) {
+                applyFunc($el.find('.' + cls));
+            });
+        }
+    };
+})(window);
 
 (function(scope) {
+    var _ = scope._;
     var JST = scope.JST;
     var ship = scope.ship;
     var Display = ship.navigator.Display;
@@ -462,20 +490,24 @@ return __p
             "click .buttons .save": "onClickSaveItem"
         },
 
-        onClickListItem: function () {
+        onClickListItem: function (ev) {
+            var id = $(ev.currentTarget).data('rowid');
+            var item = this.list.collection.findWhere({ id: id });
 
+            item.fetch().done(_.bind(this.setItemInForm, this, item));
+        },
+
+        setItemInForm: function (item) {
+            console.log(item.get('id'));
         },
 
         onClickNewItem: function () {
-
         },
 
         onClickDeleteItem: function () {
-
         },
 
         onClickSaveItem: function () {
-
         },
 
         start: function(options) {
@@ -483,6 +515,7 @@ return __p
 
             this.list = new ship.components.List({
                 collection: options.collection,
+                searchUrl: options.collection.searchUrl,
                 templateItem: options.templateItem
             });
 
@@ -618,6 +651,13 @@ return __p
     var ItemView = Backbone.View.extend({
         tagName: 'li',
 
+        attributes: function () {
+           if (this.model) {
+               return { "data-rowid": this.model.get('id') };
+           }
+           return {};
+        },
+
         initialize: function(options) {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.destroy);
@@ -636,6 +676,10 @@ return __p
         template: JST['list'],
         limit: 100,
 
+        events: {
+            "keyup input[name='search']": "onSearchInputKeyUp"
+        },
+
         initialize: function(options) {
             var collection = options.collection;
             this.listenTo(collection, 'add', this.addOne);
@@ -644,6 +688,14 @@ return __p
             this.listenTo(collection, 'sync', this.endRequest);
 
             this.templateItem = options.templateItem;
+            this.hasSearchField = !!options.searchUrl;
+
+            if (options.searchUrl) {
+                this.searchUrl = options.searchUrl;
+            }
+        },
+
+        onSearchInputKeyUp: function () {
         },
 
         loadFirstPage: function () {
@@ -678,7 +730,13 @@ return __p
         render: function() {
             this.$el.append(this.template());
             this.$list = this.$('ul.list');
+            this.$searchField = this.$('input[name="search"]');
             this.$loading = this.$('.list-loading');
+
+            if (!this.hasSearchField) {
+                this.$searchField.hide();
+            }
+
             return this;
         },
 
