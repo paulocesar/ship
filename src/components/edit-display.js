@@ -2,6 +2,7 @@
     var _ = scope._;
     var JST = scope.JST;
     var ship = scope.ship;
+    var form = ship.form;
     var Display = ship.navigator.Display;
 
     var EditDisplay = Display.extend({
@@ -34,12 +35,11 @@
         onClickListItem: function (ev) {
             var id = $(ev.currentTarget).data('rowid');
             var item = this.list.collection.findWhere({ id: id });
-
             item.fetch().done(_.bind(this.setItemInForm, this, item));
         },
 
         setItemInForm: function (item) {
-            console.log(item.get('id'));
+            form.fill(this.$form, item.attributes);
         },
 
         onClickNewItem: function () {
@@ -53,8 +53,13 @@
 
         render: function() {
             this.$el.html(this.template());
-            this.$('.container-list').append(this.list.render().el);
-            this.$('.container-form').html(this.templateForm());
+
+            this.$list = this.$('.container-list');
+            this.$list.append(this.list.render().el);
+
+            this.$form = this.$('.container-form');
+            this.$form.html(this.templateForm());
+
             ship.form.applyMaskAndValidators(this.$('.container-form'));
         }
     });

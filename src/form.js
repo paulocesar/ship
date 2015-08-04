@@ -22,7 +22,7 @@
 
     var hasMoneyClass  = function (el) {
         var cls = ['mask-money', 'mask-money-positive', 'mask-money-negative'];
-        return hasClass(el,cls);
+        return hasAnyClass(el,cls);
     }
 
     ship.form = {
@@ -31,7 +31,7 @@
             fieldMask.apply(el);
         },
 
-
+        // MUST: refactor and set most part of validation in field-validator
         isValid: function (el) {
             var $el = $(el);
             var isValid = true;
@@ -86,7 +86,7 @@
             var $el = $(el);
 
             _.each(data, function (value, name) {
-                var f = $el.find("[name=['" + name + "']");
+                var f = $el.find("[name='" + name + "']");
 
                 if (f.attr('type') === 'checkout') {
                     f.prop('checked', value);

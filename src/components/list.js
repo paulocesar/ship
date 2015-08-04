@@ -57,6 +57,8 @@
                     limit: this.limit
                 })
             });
+
+            this.$loading.show();
         },
 
         loadNextPage: function () {
@@ -68,10 +70,11 @@
                     limit: this.limit
                 })
             });
+
+            this.$loading.show();
         },
 
         startRequest: function () {
-            this.$loading.show();
         },
 
         endRequest: function () {

@@ -570,7 +570,7 @@ return __p
 
     var hasMoneyClass  = function (el) {
         var cls = ['mask-money', 'mask-money-positive', 'mask-money-negative'];
-        return hasClass(el,cls);
+        return hasAnyClass(el,cls);
     }
 
     ship.form = {
@@ -579,7 +579,7 @@ return __p
             fieldMask.apply(el);
         },
 
-
+        // MUST: refactor and set most part of validation in field-validator
         isValid: function (el) {
             var $el = $(el);
             var isValid = true;
@@ -634,7 +634,7 @@ return __p
             var $el = $(el);
 
             _.each(data, function (value, name) {
-                var f = $el.find("[name=['" + name + "']");
+                var f = $el.find("[name='" + name + "']");
 
                 if (f.attr('type') === 'checkout') {
                     f.prop('checked', value);
@@ -685,6 +685,7 @@ return __p
     var _ = scope._;
     var JST = scope.JST;
     var ship = scope.ship;
+    var form = ship.form;
     var Display = ship.navigator.Display;
 
     var EditDisplay = Display.extend({
@@ -717,12 +718,11 @@ return __p
         onClickListItem: function (ev) {
             var id = $(ev.currentTarget).data('rowid');
             var item = this.list.collection.findWhere({ id: id });
-
             item.fetch().done(_.bind(this.setItemInForm, this, item));
         },
 
         setItemInForm: function (item) {
-            console.log(item.get('id'));
+            form.fill(this.$form, item.attributes);
         },
 
         onClickNewItem: function () {
@@ -736,8 +736,13 @@ return __p
 
         render: function() {
             this.$el.html(this.template());
-            this.$('.container-list').append(this.list.render().el);
-            this.$('.container-form').html(this.templateForm());
+
+            this.$list = this.$('.container-list');
+            this.$list.append(this.list.render().el);
+
+            this.$form = this.$('.container-form');
+            this.$form.html(this.templateForm());
+
             ship.form.applyMaskAndValidators(this.$('.container-form'));
         }
     });
@@ -915,6 +920,8 @@ return __p
                     limit: this.limit
                 })
             });
+
+            this.$loading.show();
         },
 
         loadNextPage: function () {
@@ -926,10 +933,11 @@ return __p
                     limit: this.limit
                 })
             });
+
+            this.$loading.show();
         },
 
         startRequest: function () {
-            this.$loading.show();
         },
 
         endRequest: function () {

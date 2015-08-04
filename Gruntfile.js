@@ -84,7 +84,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('default', ['cssmin', 'jst', 'concat', 'test', 'uglify:prod']);
+    grunt.registerTask('default', ['cssmin', 'jst', 'concat']);
+    grunt.registerTask('prod', ['cssmin', 'jst', 'concat', 'test', 'uglify:prod']);
     grunt.registerTask('test', ['karma:unit']);
     grunt.registerTask('build', ['cssmin', 'jst', 'concat', 'uglify:prod']);
 };
