@@ -8,6 +8,22 @@
         name: 'edit',
         template: JST['edit-display'],
 
+        constructor: function() {
+            Display.apply(this, arguments);
+
+            if (this.list) {
+                this.list.remove();
+            }
+
+            this.list = new ship.components.List({
+                collection: this.collection,
+                canSearch: this.canSearch,
+                templateItem: this.templateItem
+            });
+
+            this.render();
+        },
+
         events: {
             "click ul.list li": "onClickListItem",
             "click .buttons .new": "onClickNewItem",
@@ -35,22 +51,11 @@
         onClickSaveItem: function () {
         },
 
-        start: function(options) {
-            this.templateForm = options.templateForm;
-
-            this.list = new ship.components.List({
-                collection: options.collection,
-                searchUrl: options.collection.searchUrl,
-                templateItem: options.templateItem
-            });
-
-            this.render();
-        },
-
         render: function() {
             this.$el.html(this.template());
             this.$('.container-list').append(this.list.render().el);
             this.$('.container-form').html(this.templateForm());
+            ship.form.applyMaskAndValidators(this.$('.container-form'));
         }
     });
 

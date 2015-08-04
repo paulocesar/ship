@@ -69,6 +69,9 @@
     };
 
     ship.fieldValidator = {
+        validators: validators,
+        errorLabel: errorLabel,
+
         apply: function(el) {
             _.each(validators, function(data, cls) {
                 var func = buildValidatorFunc(data);
@@ -77,14 +80,6 @@
                     .on('change', func)
                     .on('focusout', func);
             });
-        },
-
-        reset: function(el) {
-            // MUST change to css
-            $(el).find('input, textarea')
-                .css('background-color', 'white');
-
-            $(el).find('.error-message').remove();
         }
     };
 })(window);

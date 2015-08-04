@@ -43,11 +43,7 @@
             this.listenTo(collection, 'sync', this.endRequest);
 
             this.templateItem = options.templateItem;
-            this.hasSearchField = !!options.searchUrl;
-
-            if (options.searchUrl) {
-                this.searchUrl = options.searchUrl;
-            }
+            this.canSearch = options.canSearch;
         },
 
         onSearchInputKeyUp: function () {
@@ -88,7 +84,7 @@
             this.$searchField = this.$('input[name="search"]');
             this.$loading = this.$('.list-loading');
 
-            if (!this.hasSearchField) {
+            if (!this.canSearch) {
                 this.$searchField.hide();
             }
 

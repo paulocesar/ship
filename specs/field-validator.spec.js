@@ -66,15 +66,4 @@ describe('ship field validator', function() {
         removeForm();
     });
 
-    it('clear validator', function() {
-        createForm('not-empty');
-
-        ship.fieldValidator.apply($form);
-        $field.focusin().focusout();
-        ship.fieldValidator.reset($form);
-
-        $form.find('.error-message').length.should.eql(0);
-
-        removeForm();
-    });
 });

@@ -46,6 +46,7 @@ module.exports = function(grunt) {
                     'src/field-validator.js',
                     'src/navigator.js',
                     'src/field-mask.js',
+                    'src/form.js',
                     'src/components/**/*.js'
                 ],
                 dest: 'ship.js'

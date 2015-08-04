@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-08-03 */
+/*! ship - v0.0.1 - 2015-08-04 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["edit-display"] = function(obj) {
@@ -297,6 +297,9 @@ return __p
     };
 
     ship.fieldValidator = {
+        validators: validators,
+        errorLabel: errorLabel,
+
         apply: function(el) {
             _.each(validators, function(data, cls) {
                 var func = buildValidatorFunc(data);
@@ -305,14 +308,6 @@ return __p
                     .on('change', func)
                     .on('focusout', func);
             });
-        },
-
-        reset: function(el) {
-            // MUST change to css
-            $(el).find('input, textarea')
-                .css('background-color', 'white');
-
-            $(el).find('.error-message').remove();
         }
     };
 })(window);
@@ -447,6 +442,24 @@ return __p
 
 (function (scope) {
     var ship = scope.ship;
+    var money = ship.money;
+    var rgxNotBankDigit = /[^\dx]/g;
+    var rgxNotDigit = /[^\d]/g;
+
+
+    var setDateInterval = function () {
+        $el.each(function () {
+            var f = $(this);
+
+            if (f.hasClass('only-date-future')) {
+                f.data("DateTimePicker").minDate(moment());
+            }
+
+            if (f.hasClass('only-date-past')) {
+                f.data("DateTimePicker").maxDate(moment());
+            }
+        });
+    };
 
     var masks = {
         'mask-money': function ($el) {
@@ -459,18 +472,213 @@ return __p
 
         'mask-money-negative': function ($el) {
             money.applyMask($el, { allowNegative: true });
+
+            var onChange = function () {
+                var val = $el.maskMoney('unmasked')[0];
+                if (val > 0) {
+                    val = 0 - val;
+                    $el.maskMoney('mask', val);
+                }
+            };
+
+            $el.on('keyup', onChange).on('change', onChange);
+        },
+
+        'mask-number-bank': function ($el) {
+            var func = function () {
+                var f = $(this);
+                var val = String(f.val());
+                var l = null;
+
+                val = val.replace(rgxNotBankDigit, '');
+
+                if (val.length > 3) {
+                    l = val.length - 1;
+                    val = val.slice(0, -1) + "-" + val.slice(l, l+1);
+                }
+
+                f.val(val);
+            };
+
+            $el.on('keyup', func).on('change', func).on('focusout', func);
+        },
+
+        'mask-only-number': function ($el) {
+            var func = function () {
+                var f = $(this);
+                f.val(String(f.val()).replace(rgxNotDigit, ""));
+            };
+
+            $el.on('keyup', func).on('change', func).on('focusout', func);
+        },
+        /*
+        'mask-date-day': function ($el) {
+            $el.datetimepicker({
+                viewMode: 'days',
+                format: 'DD/MM/YYYY'
+            });
+
+            setDateInterval($el);
+        },
+
+        'mask-date-month': function ($el) {
+            $el.datetimepicker({
+                viewMode: 'months',
+                format: 'MM/YYYY'
+            });
+
+            setDateInterval($el);
         }
+       */
     };
 
     ship.fieldMask = {
+        masks: masks,
+
         apply: function (el) {
             var $el = $(el);
 
             _.each(masks, function (applyFunc, cls) {
-                applyFunc($el.find('.' + cls));
+                var f = $el.find('.' + cls);
+                if (!_.isEmpty(f)) { applyFunc(f); }
             });
         }
     };
+})(window);
+
+(function (scope) {
+    var _ = scope._;
+    var $ = scope.$;
+    var ship = scope.ship;
+    var fieldValidator = ship.fieldValidator;
+    var fieldMask = ship.fieldMask;
+    var money = ship.money;
+
+    var hasAnyClass = function (el, classes) {
+        var hasClass = false;
+        var $el = $(el);
+        classes = [].concat(classes);
+
+        _.each(classes, function (cls) {
+            if ($el.hasClass(cls)) {
+                hasClass = true;
+            }
+        });
+
+        return hasClass;
+    };
+
+    var hasMoneyClass  = function (el) {
+        var cls = ['mask-money', 'mask-money-positive', 'mask-money-negative'];
+        return hasClass(el,cls);
+    }
+
+    ship.form = {
+        applyMaskAndValidators: function (el) {
+            fieldValidator.apply(el);
+            fieldMask.apply(el);
+        },
+
+
+        isValid: function (el) {
+            var $el = $(el);
+            var isValid = true;
+
+            _.each(fieldValidator.validators, function (v, cls) {
+                $el.find("." + cls).each(function () {
+                    var f = $(this);
+
+                    if (!v.test(f.val())) {
+                        isValid = false;
+                        if (highlightInvalid) {
+                            fieldValidator.errorLabel.apply(f, v.message)
+                        }
+                        return;
+                    }
+
+                    fieldValidator.errorLabel.remove(f);
+
+                });
+            });
+
+            return isValid;
+        },
+
+        read: function (el) {
+            var data = {};
+            var $el = $(el);
+
+            $el.find('input, textarea, select').each(function () {
+                var f = $(this);
+                var val = hasMoneyClass(f) ? f.maskMoney('unmasked')[0] : f.val();
+                if (_.isString(val)) { val = $.trim(val); }
+                adta[f.attr('name')] = val;
+            });
+
+            $el.find('find[type="checkbox"]').each(function () {
+                var f = $(this);
+                data[f.attr('name')] = f.is(":checked") ? '1' : '0';
+            });
+
+            $el.find('.dropdown-search').each(function () {
+                var f = $(this);
+                var name = f.data('searchname');
+                var value = f.data('itemid');
+                if (_.isString(value)) { value = $.trim(value); }
+                data[name] = value;
+            });
+        },
+
+        fill: function (el, data) {
+            this.reset(el);
+            var $el = $(el);
+
+            _.each(data, function (value, name) {
+                var f = $el.find("[name=['" + name + "']");
+
+                if (f.attr('type') === 'checkout') {
+                    f.prop('checked', value);
+                    return;
+                }
+
+                if (f.hasClass('mask-date-day')) {
+                    f.val(momen(value).utc().format("DD/MM/YYYY"));
+                    return;
+                }
+
+                if (f.hasClass('mask-date-month')) {
+                    f.val(moment(value).utc().format("MM/YYYY"));
+                    return;
+                }
+
+                if (hasMoneyClass(f)) {
+                    f.addClass(money.getColorCls(value));
+                    value = money.format(value);
+                }
+
+                f.val(value);
+            });
+        },
+
+        reset: function (el) {
+            var $el = $(el);
+
+            $el.find('input, textarea').css('background-color', 'white');
+            $el.find('.error-message').remove();
+            $el.find('input, textarea').val('');
+            $el.find('input[type="checkbox"]').attr('checked', false);
+
+            $el.find('select').each(function () {
+                var s = $(this);
+                s.val(s.find("option:first").val());
+            });
+
+            var m = $el.find('.mask-money, .mask-money-positive, .mask-money-negative');
+            m.val(m.defaultVal);
+            money.setColor(m);
+        }
+    };
+
 })(window);
 
 (function(scope) {
@@ -482,6 +690,22 @@ return __p
     var EditDisplay = Display.extend({
         name: 'edit',
         template: JST['edit-display'],
+
+        constructor: function() {
+            Display.apply(this, arguments);
+
+            if (this.list) {
+                this.list.remove();
+            }
+
+            this.list = new ship.components.List({
+                collection: this.collection,
+                canSearch: this.canSearch,
+                templateItem: this.templateItem
+            });
+
+            this.render();
+        },
 
         events: {
             "click ul.list li": "onClickListItem",
@@ -510,22 +734,11 @@ return __p
         onClickSaveItem: function () {
         },
 
-        start: function(options) {
-            this.templateForm = options.templateForm;
-
-            this.list = new ship.components.List({
-                collection: options.collection,
-                searchUrl: options.collection.searchUrl,
-                templateItem: options.templateItem
-            });
-
-            this.render();
-        },
-
         render: function() {
             this.$el.html(this.template());
             this.$('.container-list').append(this.list.render().el);
             this.$('.container-form').html(this.templateForm());
+            ship.form.applyMaskAndValidators(this.$('.container-form'));
         }
     });
 
@@ -688,11 +901,7 @@ return __p
             this.listenTo(collection, 'sync', this.endRequest);
 
             this.templateItem = options.templateItem;
-            this.hasSearchField = !!options.searchUrl;
-
-            if (options.searchUrl) {
-                this.searchUrl = options.searchUrl;
-            }
+            this.canSearch = options.canSearch;
         },
 
         onSearchInputKeyUp: function () {
@@ -733,7 +942,7 @@ return __p
             this.$searchField = this.$('input[name="search"]');
             this.$loading = this.$('.list-loading');
 
-            if (!this.hasSearchField) {
+            if (!this.canSearch) {
                 this.$searchField.hide();
             }
 
