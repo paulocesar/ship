@@ -64,7 +64,7 @@
                 var f = $(this);
                 var val = hasMoneyClass(f) ? f.maskMoney('unmasked')[0] : f.val();
                 if (_.isString(val)) { val = $.trim(val); }
-                adta[f.attr('name')] = val;
+                data[f.attr('name')] = val;
             });
 
             $el.find('find[type="checkbox"]').each(function () {
@@ -79,6 +79,8 @@
                 if (_.isString(value)) { value = $.trim(value); }
                 data[name] = value;
             });
+
+            return data;
         },
 
         fill: function (el, data) {

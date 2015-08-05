@@ -23,6 +23,7 @@
             });
 
             this.render();
+            this.updateButtons();
         },
 
         events: {
@@ -34,21 +35,59 @@
 
         onClickListItem: function (ev) {
             var id = $(ev.currentTarget).data('rowid');
-            var item = this.list.collection.findWhere({ id: id });
+            var item = this.collection.findWhere({ id: id });
             item.fetch().done(_.bind(this.setItemInForm, this, item));
         },
 
         setItemInForm: function (item) {
+            this.currentItem = item;
+            this.updateButtons();
+
             form.fill(this.$form, item.attributes);
         },
 
+        updateButtons: function () {
+            var $btns = this.$('button.delete, button.new');
+
+            if (!this.currentItem) {
+                return $btns.hide();
+            }
+
+            $btns.show();
+        },
+
         onClickNewItem: function () {
+            this.currentItem = null;
+            this.updateButtons();
+
+            form.reset(this.$form);
         },
 
         onClickDeleteItem: function () {
         },
 
         onClickSaveItem: function () {
+            if (!form.isValid(this.$formi, true)) {
+                return;
+            }
+
+            var data = form.read(this.$form);
+            var item = this.currentItem;
+
+            if (!item) {
+                item = new this.collection.model();
+                this.collection.add(item);
+            }
+
+            item.set(data);
+            item.save().done(_.bind(this.onSaveDone, this, item));
+        },
+
+        onSaveDone: function (item) {
+            this.currentItem = item;
+            form.fill(item);
+
+            this.updateButtons();
         },
 
         render: function() {

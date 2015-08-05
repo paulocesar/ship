@@ -612,7 +612,7 @@ return __p
                 var f = $(this);
                 var val = hasMoneyClass(f) ? f.maskMoney('unmasked')[0] : f.val();
                 if (_.isString(val)) { val = $.trim(val); }
-                adta[f.attr('name')] = val;
+                data[f.attr('name')] = val;
             });
 
             $el.find('find[type="checkbox"]').each(function () {
@@ -627,6 +627,8 @@ return __p
                 if (_.isString(value)) { value = $.trim(value); }
                 data[name] = value;
             });
+
+            return data;
         },
 
         fill: function (el, data) {
@@ -706,6 +708,7 @@ return __p
             });
 
             this.render();
+            this.updateButtons();
         },
 
         events: {
@@ -717,21 +720,59 @@ return __p
 
         onClickListItem: function (ev) {
             var id = $(ev.currentTarget).data('rowid');
-            var item = this.list.collection.findWhere({ id: id });
+            var item = this.collection.findWhere({ id: id });
             item.fetch().done(_.bind(this.setItemInForm, this, item));
         },
 
         setItemInForm: function (item) {
+            this.currentItem = item;
+            this.updateButtons();
+
             form.fill(this.$form, item.attributes);
         },
 
+        updateButtons: function () {
+            var $btns = this.$('button.delete, button.new');
+
+            if (!this.currentItem) {
+                return $btns.hide();
+            }
+
+            $btns.show();
+        },
+
         onClickNewItem: function () {
+            this.currentItem = null;
+            this.updateButtons();
+
+            form.reset(this.$form);
         },
 
         onClickDeleteItem: function () {
         },
 
         onClickSaveItem: function () {
+            if (!form.isValid(this.$formi, true)) {
+                return;
+            }
+
+            var data = form.read(this.$form);
+            var item = this.currentItem;
+
+            if (!item) {
+                item = new this.collection.model();
+                this.collection.add(item);
+            }
+
+            item.set(data);
+            item.save().done(_.bind(this.onSaveDone, this, item));
+        },
+
+        onSaveDone: function (item) {
+            this.currentItem = item;
+            form.fill(item);
+
+            this.updateButtons();
         },
 
         render: function() {
