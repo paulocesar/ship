@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-08-04 */
+/*! ship - v0.0.1 - 2015-08-09 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["edit-display"] = function(obj) {
@@ -511,7 +511,7 @@ return __p
 
             $el.on('keyup', func).on('change', func).on('focusout', func);
         },
-        /*
+
         'mask-date-day': function ($el) {
             $el.datetimepicker({
                 viewMode: 'days',
@@ -529,7 +529,6 @@ return __p
 
             setDateInterval($el);
         }
-       */
     };
 
     ship.fieldMask = {
@@ -540,7 +539,7 @@ return __p
 
             _.each(masks, function (applyFunc, cls) {
                 var f = $el.find('.' + cls);
-                if (!_.isEmpty(f)) { applyFunc(f); }
+                if (f.length > 0) { applyFunc(f); }
             });
         }
     };

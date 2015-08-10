@@ -7,6 +7,7 @@
     "backbone": "^1.2.1",
     "bootstrap": "^3.3.5",
     "cropper": "^0.10.0",
+    "eonasdan-bootstrap-datetimepicker": "git+https://github.com/Eonasdan/bootstrap-datetimepicker.git",
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-cssmin": "^0.12.3",

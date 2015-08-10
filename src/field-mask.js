@@ -69,7 +69,7 @@
 
             $el.on('keyup', func).on('change', func).on('focusout', func);
         },
-        /*
+
         'mask-date-day': function ($el) {
             $el.datetimepicker({
                 viewMode: 'days',
@@ -87,7 +87,6 @@
 
             setDateInterval($el);
         }
-       */
     };
 
     ship.fieldMask = {
@@ -98,7 +97,7 @@
 
             _.each(masks, function (applyFunc, cls) {
                 var f = $el.find('.' + cls);
-                if (!_.isEmpty(f)) { applyFunc(f); }
+                if (f.length > 0) { applyFunc(f); }
             });
         }
     };
