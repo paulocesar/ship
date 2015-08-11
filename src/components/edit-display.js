@@ -64,10 +64,11 @@
         },
 
         onClickDeleteItem: function () {
+            this.currentItem.destroy();
         },
 
         onClickSaveItem: function () {
-            if (!form.isValid(this.$formi, true)) {
+            if (!form.isValid(this.$form, true)) {
                 return;
             }
 
