@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-08-09 */
+/*! ship - v0.0.1 - 2015-08-11 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["edit-display"] = function(obj) {
@@ -719,7 +719,7 @@ return __p
 
         onClickListItem: function (ev) {
             var id = $(ev.currentTarget).data('rowid');
-            var item = this.collection.findWhere({ id: id });
+            var item = this.collection.findWhere({ id: String(id) });
             item.fetch().done(_.bind(this.setItemInForm, this, item));
         },
 
