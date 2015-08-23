@@ -1,4 +1,4 @@
-/*! ship - v0.0.1 - 2015-08-11 */
+/*! ship - v0.0.1 - 2015-08-23 */
 this["JST"] = this["JST"] || {};
 
 this["JST"]["edit-display"] = function(obj) {
@@ -719,7 +719,7 @@ return __p
 
         onClickListItem: function (ev) {
             var id = $(ev.currentTarget).data('rowid');
-            var item = this.collection.findWhere({ id: String(id) });
+            var item = this.collection.findWhere({ _id: String(id) });
             item.fetch().done(_.bind(this.setItemInForm, this, item));
         },
 
@@ -912,7 +912,7 @@ return __p
 
         attributes: function () {
            if (this.model) {
-               return { "data-rowid": this.model.get('id') };
+               return { "data-rowid": this.model.get('_id') };
            }
            return {};
         },
@@ -954,7 +954,7 @@ return __p
         },
 
         loadFirstPage: function () {
-            this.page = 1;
+            this.page = 0;
             this.collection.fetch({
                 data: $.param({
                     page: this.page,

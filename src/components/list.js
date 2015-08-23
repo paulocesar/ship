@@ -8,7 +8,7 @@
 
         attributes: function () {
            if (this.model) {
-               return { "data-rowid": this.model.get('id') };
+               return { "data-rowid": this.model.get('_id') };
            }
            return {};
         },
@@ -50,7 +50,7 @@
         },
 
         loadFirstPage: function () {
-            this.page = 1;
+            this.page = 0;
             this.collection.fetch({
                 data: $.param({
                     page: this.page,

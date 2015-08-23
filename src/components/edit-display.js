@@ -35,7 +35,7 @@
 
         onClickListItem: function (ev) {
             var id = $(ev.currentTarget).data('rowid');
-            var item = this.collection.findWhere({ id: String(id) });
+            var item = this.collection.findWhere({ _id: String(id) });
             item.fetch().done(_.bind(this.setItemInForm, this, item));
         },
 
